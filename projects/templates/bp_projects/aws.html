@@ -1,12 +1,151 @@
-<!-- Extending the project layout, as this file will do minor customizations -->
-{% extends "layouts/project.html" %}
-
 <!-- Setting up variables to customize "project" details to be specific to index page -->
 {% set project = "AWS Deployment Walkthrough" %}
- <html>
-    <head>
-        <body>
-            <text>Hello World</text>
-        </body>
-    </head>
-</html>
+
+{% extends "layouts/base.html" %}
+<!-- Custom block for standardizing Project Data-->
+
+{% block style %}
+    :root{
+        --white: whitesmoke;
+        --black: black;
+        --grey: grey;
+    }
+
+    html, body{
+        margin: 0;
+        height: 100%;
+        animation: fadein 2s;
+        -moz-animation: fadein 2s; /* Firefox */
+        -webkit-animation: fadein 2s; /* Safari and Chrome */
+        -o-animation: fadein 2s; /* Opera */
+        background-color: var(--grey);
+        color: var(--white);
+    }
+
+    .dark-mode {
+        background-color: var(--white);
+        color: var(--black);
+    }
+
+    h1{
+        font-size: 5em;
+    }
+
+    a {
+        color: midnightblue;
+    }
+
+    .fa{
+        font-size: 3em;
+        letter-spacing: 1em;
+        transition: all .2s;
+        color: white;
+    }
+
+    .fa:hover{
+        transform: translateY(10px);
+    }
+
+    .fa-youtube-play:hover{
+        color: #cc0000;
+    }
+
+    .fa-twitter:hover{
+        color: #1da1f2;
+    }
+
+    .fa-github:hover{
+        color: #000000;
+    }
+
+    .btn:link,
+    .btn:visited {
+        text-transform: uppercase;
+        text-decoration: none;
+        padding: 15px 40px;
+        display: inline-block;
+        border-radius: 100px;
+        transition: all .2s;
+        position: absolute;
+        color: white;
+        font-size: 2.5em;
+    }
+
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 20px 40px rgba(255, 255, 255, 0.2);
+    }
+    .overview {
+        padding-left: 10%;
+        padding-bottom: 10%;
+        padding-top: 10%;
+    }
+
+    .btn:active {
+        transform: translateY(-1px);
+        box-shadow: 0 5px 10px rgba(255, 255, 255, 0.2);
+    }
+
+    .row{
+        margin: auto;
+    }
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row justify-content-end" style="padding: 2%;">
+        <div class="col-2" style="text-align: right;">
+            {% block info %}
+                <!-- notice jinja style variables used in href's -->
+                <a><h5>{{basename}}</h5></a>
+                <a href={{github}} target="_blank"><i class="fa fa-github"></i></a>
+            {% endblock %}
+        </div>
+    </div>
+
+    <div class="product" style="margin-top: 2%;">
+        <div class="row" style="padding: 10%; padding-top: 0%; padding-bottom: 5%;">
+
+            <div class="col-8" >
+                <h1>{{ project }} Project</h1>
+            </div>
+
+        </div>
+
+        <div class="row" style="padding-left: 10%;">
+            <div class="col-3">
+                <a href="{{ overview }}" class="btn">Overview</a>
+            </div>
+        
+            <div class="col-3">
+                <a href="{{ scrumboard }}" class="btn">Scrum Board</a>
+            </div>
+        
+            <div class="col-3">
+                <a href="{{ repo }}" class="btn">Repository</a>
+            </div>
+        
+            <div class="col-3">
+                <a href="{{ authors }}" class="btn">Authors</a>
+            </div>
+        </div>
+
+<div class="overview">
+    <h2>Project Description.</h2>
+    <p>This project was created to demonstrate the deployment of a web application to AWS. The web application is a simple Flask application that allows users to upload images and view them in a gallery. The application is deployed to an EC2 instance and uses S3 to store the images. The application is also connected to a RDS database to store the image metadata.</p>
+</div>
+
+    </div>
+
+
+    
+    <footer>
+        <div class="row justify-content-center">
+            <div class="col-2">
+                <a href="https://www.youtube.com/channel/UClIKOsDS5dsfzFA3zveDT3Q?view_as=subscriber" target="_blank"><i class="fa fa-youtube-play"></i></a>
+            </div>
+        </div>
+    </footer>
+</div>
+
+{% endblock %}
