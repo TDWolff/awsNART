@@ -1,7 +1,7 @@
 <!-- Setting up variables to customize "project" details to be specific to index page -->
 {% set project = "AWS Deployment Walkthrough" %}
 
-{% extends "layouts/base.html" %}
+{% extends "layouts/baseaws.html" %}
 <!-- Custom block for standardizing Project Data-->
 
 {% block style %}
@@ -11,20 +11,10 @@
         --grey: grey;
     }
 
-    html, body{
-        margin: 0;
-        height: 100%;
-        animation: fadein 2s;
-        -moz-animation: fadein 2s; /* Firefox */
-        -webkit-animation: fadein 2s; /* Safari and Chrome */
-        -o-animation: fadein 2s; /* Opera */
-        background-color: var(--grey);
-        color: var(--white);
-    }
-
-    .dark-mode {
-        background-color: var(--white);
-        color: var(--black);
+    /* Set the text color to white */
+    body {
+        background: #0a1e30;
+        color: white;
     }
 
     h1{
@@ -75,10 +65,31 @@
         transform: translateY(-3px);
         box-shadow: 0 20px 40px rgba(255, 255, 255, 0.2);
     }
+
+    /* Set the border properties for the text elements */
     .overview {
-        padding-left: 10%;
-        padding-bottom: 10%;
-        padding-top: 10%;
+        position: relative; /* Create a relative positioning context */
+    }
+
+    .overview {
+        border: 10px solid transparent; /* Transparent border initially */
+        border-radius: 10px; /* Rounded corners */
+        padding: 30px 20px; /* Adjust padding for text */
+        margin: 0; /* Remove default margin */
+        margin-bottom: 20px; /* Add margin to create space between text and buttons */
+        color: white; /* Set text color to white */
+        background-clip: padding-box; /* Clip background to padding box */
+    }
+
+    .border-fill {
+        background-color: rgba(10, 30, 48, 0.8); /* Background color for border fill */
+        position: absolute; /* Position behind text elements */
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -1; /* Place it behind the text elements */
+        border-radius: 10px; /* Rounded corners */
     }
 
     .btn:active {
@@ -112,7 +123,7 @@
 
         </div>
 
-        <div class="row" style="padding-left: 10%;">
+        <div class="row" style="padding-left: 0%;">
             <div class="col-3">
                 <a href="{{ overview }}" class="btn">Overview</a>
             </div>
@@ -130,10 +141,81 @@
             </div>
         </div>
 
-<div class="overview">
-    <h2>Project Description.</h2>
-    <p>This project was created to demonstrate the deployment of a web application to AWS. The web application is a simple Flask application that allows users to upload images and view them in a gallery. The application is deployed to an EC2 instance and uses S3 to store the images. The application is also connected to a RDS database to store the image metadata.</p>
-</div>
+        <br>
+
+
+
+
+
+        <br>
+
+
+
+
+        <br>
+        <br>
+
+
+
+
+
+        <br>
+
+
+
+
+        <br>
+        <br>
+
+
+
+
+
+        <br>
+
+
+
+
+        <br>
+        <br>
+
+
+
+
+
+        <br>
+
+
+
+
+        <br>
+
+        <div class="overview">
+            <div class="border-fill"></div>
+                <h2>Getting Started.</h2>
+                <p>First run a git clone of the template repository <a href="https://github.com/nighthawkcoders/flask_portfolio"> Github Template </a>. Then run the following commands to get the project up and running.</p>
+                <ln>cd flask_portfolio (Replace flask_portfolio with your folder name for the project.)</ln>
+                <p>vscode .</p>
+                <p>Inside vscode look for main.py, Dockerfile, docker_compose.yml, and requirements.txt. These are the files that will need to be modified to get the project up and running. Once in those files find the example port so flask_portfolio looks like 80:80 and replace it with a port of your choice with 8--- as the leading port #.</p>
+                <p>Once you have done that run the following commands in the terminal.</p>
+                <ln>docker-compose build</ln>
+                <p>Once that is done check it by opening http://localhost:(Your port number selected).</p>
+                <p>Now that you have the project up and running you can start working on aws deployment. Go to <a href="https://us-east-2.console.aws.amazon.com/ec2/home?region=us-east-2#Instances:v=3;$case=tags:true%5C,client:false;$regex=tags:false%5C,client:false;sort=publicIp">Aws Server Page </a></p>
+                <p>Click IAM user and log in as "nighthawkcodingsociety". Your IAM Username is your github profile name, and the password is "123Qwerty!". Once you log in, you will be required to change your password, which should have one lowercase letter, one uppercase letter, one number, and one special character (as well as a minimmum length of 8 characters). Once you have changed your password, you will be redirected to the AWS console.</p>
+
+                <h2>Importing To AWS EC2</h2>
+                <p>Once you are in the AWS console, click on EC2. Then click on the "CSP" instance.</p>
+                <p>Inside the instance you will see Public IPv4 DNS, with a link to open the address. Click on that and it will redirect you to Ubuntu where it prompts you to sign in. Sign in with Username:ubuntu and Password:Ubuntu14*&*41.</p>
+                <p>Once you are in Ubuntu, run the following commands in the terminal.</p>
+                <ln>"git clone (put your github HTML clone link here)" it may prompt you to log in if it does put your Github Username and then your <a href="https://github.com/settings/tokens">github token</a>. once done type ls to see if you see your repository name.</ln>
+                <ln>Build your site: docker-compose up -d --build</ln>
+                <ln>Test your site: curl localhost:8--- (replace "8—" with your port number)</ln>
+                <ln>If all works then proceed if not reach out to a teacher or student helper for more assistance.</ln>
+
+                <h2>Configuring Your Domain</h2>
+                <p>Goto AWS Route 53 and setup DNS subdomain for your backend server.</p>
+
+        </div>
 
     </div>
 
