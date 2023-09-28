@@ -213,7 +213,13 @@
                 <ln>If all works then proceed if not reach out to a teacher or student helper for more assistance.</ln>
 
                 <h2>Configuring Your Domain</h2>
-                <p>Goto AWS Route 53 and setup DNS subdomain for your backend server.</p>
+                <p>Go to AWS Route 53 and setup DNS subdomain for your backend server.</p>
+                <p>Click on hosted zones and click on stu.nighthawkcodingsociety.com. Click create record and name it what ever you want. For me i will be using my pre-existing one nartbackend.ect.com. Set record type to A, and for the value set it to 3.130.255.192. TTL is time to live, the higher the value the more expensive, so I recommend between 300-600.</p>
+
+
+                <h2>Nginx Setup</h2>
+                <p>Navigate in terminal to nginx on the ec2: cd /etc/nginx/sites-available</p>
+                <p>Create an nginx config file (change projectUniqueName to make you unique config file, suggest using your registered domain): sudo nano projectUniqueName (IMPORTANT: projectuniquename must match the folder name of your project in the main directory.)</p>
 
         </div>
 
