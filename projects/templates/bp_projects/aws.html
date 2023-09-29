@@ -13,8 +13,10 @@
 
     /* Set the text color to white */
     body {
-        background: #0a1e30;
-        color: white;
+        background-image: url('aws.png');
+        background-size: cover; /* Adjust as needed */
+        background-repeat: repeat; /* Adjust as needed */
+        color: white; /* Text color */
     }
 
     h1{
@@ -22,7 +24,19 @@
     }
 
     a {
-        color: midnightblue;
+        color: #808080; /* Change to the color you want */
+        text-decoration: none; /* Remove underlines by default */
+    }
+
+    /* Style visited links */
+    a:visited {
+        color: #666464; /* Change to the color you want for visited links */
+    }
+
+    /* Style links on hover */
+    a:hover {
+        color: #9e9d9d; /* Change to the color you want on hover */
+        text-decoration: underline; /* Add underlines on hover if desired */
     }
 
     .fa{
@@ -100,6 +114,23 @@
     .row{
         margin: auto;
     }
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Wait for the document to be fully loaded before adding the event listener
+            var overviewScrollButton = document.getElementById('overviewScrollButton');
+            if (overviewScrollButton) {
+                overviewScrollButton.addEventListener('click', function (event) {
+                    event.preventDefault(); // Prevent the default behavior of the anchor link
+                    var overviewSection = document.getElementById('overviewSection');
+                    if (overviewSection) {
+                        overviewSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            }
+        });
+    </script>
+
 {% endblock %}
 
 {% block body %}
@@ -125,7 +156,7 @@
 
         <div class="row" style="padding-left: 0%;">
             <div class="col-3">
-                <a href="{{ overview }}" class="btn">Overview</a>
+                <a href="#overviewSection" class="btn" id="overviewScrollButton" type="button">Overview</a>
             </div>
         
             <div class="col-3">
@@ -192,7 +223,7 @@
 
         <div class="overview">
             <div class="border-fill"></div>
-                <h2>Getting Started.</h2>
+                <h2 id="overviewSection">Getting Started.</h2>
                 <p>First run a git clone of the template repository <a href="https://github.com/nighthawkcoders/flask_portfolio"> Github Template </a>. Then run the following commands to get the project up and running.</p>
                 <ln>cd flask_portfolio (Replace flask_portfolio with your folder name for the project.)</ln>
                 <p>vscode .</p>
@@ -219,7 +250,123 @@
 
                 <h2>Nginx Setup</h2>
                 <p>Navigate in terminal to nginx on the ec2: cd /etc/nginx/sites-available</p>
-                <p>Create an nginx config file (change projectUniqueName to make you unique config file, suggest using your registered domain): sudo nano projectUniqueName (IMPORTANT: projectuniquename must match the folder name of your project in the main directory.)</p>
+                <p>Create an nginx config file (change projectUniqueName to make you unique config file): sudo nano projectUniqueName (IMPORTANT: projectuniquename must match the folder name of your project in the main directory.)</p>
+                <p>Use the template below to write your config file, and make the changes according to the comments.</p>
+                <code>server {
+                    listen 80;
+                     listen [::]:80;
+                     server_name -----.stu.nighthawkcodingsociety.com ; # CHANGE SERVER NAME TO YOUR REGISTERED DOMAIN
+                     location / {
+                         proxy_pass http://localhost:8---; # CHANGE PORT TO YOUR UNIQUE PORT
+                         # Simple requests
+                         if ($request_method ~* "(GET|POST|PUT|DELETE)") { # Customize Request methods based on your needs
+                                 add_header "Access-Control-Allow-Origin"  *;
+                         }
+                         # Preflighted requests
+                         if ($request_method = OPTIONS ) {
+                                 add_header "Access-Control-Allow-Origin"  *;
+                                 add_header "Access-Control-Allow-Methods" "GET, POST, PUT, DELETE, OPTIONS, HEAD"; # Make sure the request methods above match here
+                                 add_header "Access-Control-Allow-Headers" "Authorization, Origin, X-Requested-With, Content-Type, Accept";
+                                 return 200;
+                         }
+                     }
+                 }</code>
+                 <p>To save changes, ctl X or cmd X, then y, then enter. </p>
+                 <p>Activate configuration. Create a symbolic link (change projectUniqueName to your nginx config file name): cd /etc/nginx/sites-enabled, then sudo ln -s /etc/nginx/sites-available/projectUniqueName /etc/nginx/sites-enabled.</p>
+                 <p>Validate by running: sudo nginx -t</p>
+                 <p>Restart nginx: sudo systemctl restart nginx</p>
+                 <p>Test your domain name on your desktop browser now (only http://, not https://.</p>
+
+
+                <h2>CertBot Config</h2>
+                <p>Run command to right and follow prompts: "sudo certbot --nginx"</p>
+                <h3>Ideal Terminal Output</h3>
+                <pre><code>
+                Saving debug log to /var/log/letsencrypt/letsencrypt.log
+                Plugins selected: Authenticator nginx, Installer nginx
+                    
+                 Which names would you like to activate HTTPS for?
+                 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+                 ...
+                 28: cars.nighthawkcodingsociety.com
+                 29: dolphin.nighthawkcodingsociety.com
+                 30: saakd.nighthawkcodingsociety.com
+                 ...
+                 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+                 Select the appropriate numbers separated by commas and/or spaces, or leave input
+                 blank to select all options shown (Enter 'c' to cancel): # ENTER YOUR CORRESPONDING NUMBER
+                    
+                 Cert not yet due for renewal
+                    
+                 You have an existing certificate that has exactly the same domains or certificate name you requested and isn't close to expiry.
+                 (ref: /etc/letsencrypt/renewal/nighthawkcodingsociety.com-0001.conf)
+                    
+                 What would you like to do?
+                 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+                 1: Attempt to reinstall this existing certificate
+                2: Renew & replace the cert (limit ~5 per 7 days)
+                - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+                Select the appropriate number [1-2] then [enter] (press 'c' to cancel): 2
+                Renewing an existing certificate
+                Performing the following challenges:
+                http-01 challenge for nighthawkcodingsociety.com
+                http-01 challenge for csa.nighthawkcodingsociety.com
+                http-01 challenge for cso.nighthawkcodingsociety.com
+                http-01 challenge for flm.nighthawkcodingsociety.com
+                Waiting for verification...
+                Cleaning up challenges
+                Deploying Certificate to VirtualHost /etc/nginx/sites-enabled/nighthawk_society
+                Deploying Certificate to VirtualHost /etc/nginx/sites-enabled/nighthawk_csa
+                Deploying Certificate to VirtualHost /etc/nginx/sites-enabled/nighthawk_csp
+                Deploying Certificate to VirtualHost /etc/nginx/sites-enabled/nighthawk_flm
+                    
+                 Please choose whether or not to redirect HTTP traffic to HTTPS, removing HTTP access.
+                 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+                 1: No redirect - Make no further changes to the webserver configuration.
+                 2: Redirect - Make all requests redirect to secure HTTPS access. Choose this for
+                 new sites, or if you're confident your site works on HTTPS. You can undo this
+                 change by editing your web server's configuration.
+                 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+                 Select the appropriate number [1-2] then [enter] (press 'c' to cancel): 2
+                 Traffic on port 80 already redirecting to ssl in /etc/nginx/sites-enabled/nighthawk_society
+                 Traffic on port 80 already redirecting to ssl in /etc/nginx/sites-enabled/nighthawk_csa
+                 Traffic on port 80 already redirecting to ssl in /etc/nginx/sites-enabled/nighthawk_csp
+                Traffic on port 80 already redirecting to ssl in /etc/nginx/sites-enabled/nighthawk_flm
+                    
+                 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+                 Your existing certificate has been successfully renewed, and the new certificate
+                 has been installed.
+                    
+                The new certificate covers the following domains:
+                https://nighthawkcodingsociety.com, 
+                https://csa.nighthawkcodingsociety.com, 
+                https://csp.nighthawkcodingsociety.com, and
+                https://flm.nighthawkcodingsociety.com,
+                 
+                 You should test your configuration at:
+                 https://www.ssllabs.com/ssltest/analyze.html?d=nighthawkcodingsociety.com
+                 https://www.ssllabs.com/ssltest/analyze.html?d=csa.nighthawkcodingsociety.com
+                 https://www.ssllabs.com/ssltest/analyze.html?d=csp.nighthawkcodingsociety.com
+                 https://www.ssllabs.com/ssltest/analyze.html?d=flm.nighthawkcodingsociety.com
+                 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+                    
+                 IMPORTANT NOTES:
+                  - Congratulations! Your certificate and chain have been saved at:
+                    /etc/letsencrypt/live/nighthawkcodingsociety.com-0001/fullchain.pem
+                    Your key file has been saved at:
+                    /etc/letsencrypt/live/nighthawkcodingsociety.com-0001/privkey.pem
+                    Your cert will expire on 2022-03-06. To obtain a new or tweaked
+                    version of this certificate in the future, simply run certbot again
+                    with the "certonly" option. To non-interactively renew *all* of
+                    your certificates, run "certbot renew"
+                  - If you like Certbot, please consider supporting our work by:
+                    
+                  Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
+                  Donating to EFF:                    https://eff.org/donate-le</code></pre>
+                    <p>Notice, your output may be different but as long a it shows it worked then all should be fine.</p>
+
+
+                    <p>Congrats you finished the AWS Deployment tutorial, now code, code, code and make a beautiful site.</p>
 
         </div>
 
