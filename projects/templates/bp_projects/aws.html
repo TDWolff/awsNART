@@ -252,7 +252,7 @@
                 <p>Navigate in terminal to nginx on the ec2: cd /etc/nginx/sites-available</p>
                 <p>Create an nginx config file (change projectUniqueName to make you unique config file): sudo nano projectUniqueName (IMPORTANT: projectuniquename must match the folder name of your project in the main directory.)</p>
                 <p>Use the template below to write your config file, and make the changes according to the comments.</p>
-                <code>server {
+                <pre><code>server {
                     listen 80;
                      listen [::]:80;
                      server_name -----.stu.nighthawkcodingsociety.com ; # CHANGE SERVER NAME TO YOUR REGISTERED DOMAIN
@@ -270,7 +270,7 @@
                                  return 200;
                          }
                      }
-                 }</code>
+                 }</code></pre>
                  <p>To save changes, ctl X or cmd X, then y, then enter. </p>
                  <p>Activate configuration. Create a symbolic link (change projectUniqueName to your nginx config file name): cd /etc/nginx/sites-enabled, then sudo ln -s /etc/nginx/sites-available/projectUniqueName /etc/nginx/sites-enabled.</p>
                  <p>Validate by running: sudo nginx -t</p>
