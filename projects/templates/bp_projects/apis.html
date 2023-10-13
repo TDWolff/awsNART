@@ -289,88 +289,58 @@
                     <div class="border-fill"></div>
                     <h2 id="overviewSection">Encoding API</h2>
 
-                    <form id="inputForm">
-                        <label for="userInput">Enter a string:</label>
-                        <input type="text" id="userInput" name="userInput" required>
-                        <button type="submit">Fetch Data</button>
+                    <form onsubmit="submitForm(event)">
+                    <label for="userInput">Enter some text:</label>
+                    <input type="text" id="userInput" name="userInput">
+                    <button type="submit">Submit</button>
                     </form>
 
                     <div id="result"></div>
 
                     <script>
-                        // Use a flag to check if the script has already run
                         var scriptExecuted = false;
-
+                    
+                        function submitForm(event) {
+                            event.preventDefault(); // Prevent the default form submission behavior
+                    
+                            var userInput = document.getElementById('userInput');
+                            if (!userInput) {
+                                console.error('Could not find userInput element');
+                                return;
+                            }
+                    
+                            var requestData = {
+                                userInput: userInput.value
+                            };
+                    
+                            fetch('/api/encode/write', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(requestData)
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data);
+                            })
+                            .catch(error => {
+                                console.error('Error sending data to the API:', error);
+                            });
+                        }
+                    
                         document.addEventListener("DOMContentLoaded", function () {
                             if (scriptExecuted) {
                                 return; // Script has already run, exit.
                             }
                             scriptExecuted = true;
-
-                            var form = document.getElementById('inputForm');
+                    
+                            var form = document.querySelector('form');
                             var resultDiv = document.getElementById('result');
-
-                            form.addEventListener('submit', function (event) {
-                                event.preventDefault();
-
-                                var userInput = document.getElementById('userInput').value;
-                                var requestData = {
-                                    userInput: userInput
-                                };
-
-                                // fetch('/api/encode/write', {
-                                //     method: 'POST',
-                                //     headers: {
-                                //         'Content-Type': 'application/json'
-                                //     },
-                                //     body: JSON.stringify(requestData)
-                                // })
-                                // .then(response => response.json())
-                                // // .then(data => {
-                                // //     // Log the data received to the console
-                                // //     console.log(data);
-                                
-                                // //     if (data.responses) {
-                                // //         var updatedResponseText = 'Updated Response List: ' + JSON.stringify(data.responses, null, 2);
-                                // //         resultDiv.textContent = updatedResponseText;
-                                // //     } else {
-                                // //         resultDiv.textContent = 'No data received.';
-                                // //     }
-                                // // })
-                                // .catch(error => {
-                                //     console.error('Error fetching data from the API:', error);
-                                // });
-
-                                // After submitting, also fetch and display the response list from /api/encode/
-                                fetch('/api/encode/', {  // This line is for reading data
-                                    method: 'GET',
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    }
-                                })
-                                .then(response => {
-                                    if (!response.ok) {
-                                        throw new Error('Network response was not ok');
-                                    }
-                                    return response.json();
-                                })
-                                .then(data => {
-                                    // Log the data received to the console
-                                    console.log(data);
-
-                                    if (data.length > 0) {
-                                        var updatedResponseText = 'Updated Response List: ' + JSON.stringify(data, null, 2);
-                                        resultDiv.textContent = updatedResponseText;
-                                    } else {
-                                        resultDiv.textContent = 'No data received.';
-                                    }
-                                })
-                                .catch(error => {
-                                    console.error('Error fetching data from the API:', error);
-                                });
-                            });
+                    
+                            form.addEventListener('submit', submitForm); // Attach the submitForm function to the form's submit event
                         });
-                    </script>
+                    </script>                
                 </body>
             </html>
         </div>

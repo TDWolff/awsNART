@@ -1,46 +1,41 @@
-from flask import Blueprint, jsonify  # jsonify creates an endpoint response object
-from flask_restful import Api, Resource # used for REST API building
-import requests  # used for testing 
+from flask import Blueprint, jsonify, request  # Import 'request' from 'flask'
+from flask_restful import Api, Resource
+import requests
 import random
 from model.encode import *
 
-encode_api = Blueprint('encode_api', __name__,
-                   url_prefix='/api/encode')
-
-# API generator https://flask-restful.readthedocs.io/en/latest/api.html#id1
+encode_api = Blueprint('encode_api', __name__, url_prefix='/api/encode')
 api = Api(encode_api)
 
 class EncodeAPI():
     class _Read(Resource):
         def get(self):
             return jsonify(getResponses())
+
     class _Write(Resource):
         def post(self):
             try:
                 data = request.get_json()
-                user_input = data.get('userInput')
-
-                # Now you can process 'user_input' as needed
-                # For example, you can append it to the response list
-                respond_data.append(user_input)
-
-                # Return a JSON response with the updated response list
-                return jsonify({'responses': respond_data})
-
+                response = data.get('userInput')  # Correctly access the 'userInput' key
+                addResponse(response)
+                respond_list.append(response)  # Add the response to the respond_list list
+                return {'response': 'success', 'respond_list': respond_list}  # Return a JSON response indicating success and the updated respond_list
             except Exception as e:
-                return jsonify({'error': 'Invalid JSON data'}), 400
+                print('Error adding response:', e)
+                return {'response': 'error', 'message': str(e)}  # Return a JSON response with an error message
 
-
-    # building RESTapi resources/interfaces, these routes are added to Web Server
-    api.add_resource(_Read, '/')
-    api.add_resource(_Write, '/write')
+api.add_resource(EncodeAPI._Read, '/')  # Add the correct resource classes
+api.add_resource(EncodeAPI._Write, '/write')
 
 
 if __name__ == "__main__": 
-    # server = "http://127.0.0.1:5000" # run local
-    server = 'https://nartbackend.nighthawkcodingsociety.com' # run from web
+    import requests
+    from flask import request
+
+    server = request.host_url.rstrip('/') # get the URL of the server dynamically
     url = server + "/api/encode"
     responses = []  # responses list
+    print(url)
 
     responses.append(
         requests.get(url+"/")  # read responses by id
