@@ -17,7 +17,7 @@ class EncodeAPI():
                     return {'response': 'error', 'message': str(e)}
 
 
-    class _Write(Resource):
+    class _WriteUsername(Resource):
         def post(self):
             try:
                 data = request.get_json()
@@ -29,7 +29,7 @@ class EncodeAPI():
                 return {'response': 'error', 'message': str(e)}
 
 api.add_resource(EncodeAPI._Read, '/')
-api.add_resource(EncodeAPI._Write, '/write')
+api.add_resource(EncodeAPI._WriteUsername, '/addusername')
 
 if __name__ == "__main__": 
     import requests

@@ -290,7 +290,7 @@
                     <h2 id="overviewSection">Encoding API</h2>
                 
                     <form onsubmit="submitForm(event)">
-                        <label for="userInput">Enter some text:</label>
+                        <label for="userInput">Enter Username:</label>
                         <input type="text" id="userInput" name="userInput">
                         <button id="submit-button" type="submit">Submit</button>
                     </form>
@@ -305,15 +305,15 @@
                 
                             var userInput = document.getElementById('userInput');
                             if (!userInput) {
-                                console.error('Could not find userInput element');
+                                console.error('Could not find userInput element.');
                                 return;
                             }
                 
                             var requestData = {
                                 userInput: userInput.value
                             };
-                            // Send the data to the API
-                            fetch('/api/encode/write', {
+                            // Send the username data to the API
+                            fetch('/api/encode/addusername', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json'
