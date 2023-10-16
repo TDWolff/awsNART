@@ -13,5 +13,9 @@
         "niko",
         "Parikh",
         "werkzeug"
+    ],
+    "python.analysis.extraPaths": [
+        "./api",
+        "./api/data"
     ]
 }

@@ -1,25 +1,21 @@
-import csv
+from flask import jsonify
 
-# models/encode.py
-respond_list = ["Hello", "Hi", "Hey",]
-respond_data = []
+respond_list = ["Hello", "Hi"]  # Initialize a list with default responses
+respond_data = []  # Initialize a list to store the responses
 
 def initEncode():
-    with open('./data/userresponses.csv', mode='r') as csv_file:
-        csv_reader = csv.DictReader(csv_file)
-        for row in csv_reader:
-            respond_data.append({"response": row["response"]})
+    for item in respond_list:
+        respond_data.append({"response": item})
 
 def getResponses():
-    return respond_data
+    response = jsonify(respond_data)  # Get the Flask Response object
+    data = response.get_json()  # Extract the JSON data from the Response object
+    return jsonify(data)  # Return the JSON data as a JSON response
 
 def addResponse(response):
-    with open('./data/userresponses.csv', mode='a', newline='') as csv_file:
-        fieldnames = ['response']
-        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-        writer.writerow({'response': response})
-        respond_data.append({"response": response})
-        return respond_data[-1]
-
-# Call initEncode to initialize the responses
-initEncode()
+    if response not in respond_list:  # Check if the response already exists in the list
+        respond_list.append(response)  # Add the new response to the list
+        respond_data.append({"response": response})  # Add the new response to the list
+        return jsonify({'updating list': 'success', 'output': response, 'responses': respond_data})
+    else:
+        return jsonify({'updating list': 'failed', 'message': 'Response already exists in the list'})

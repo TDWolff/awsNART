@@ -1,32 +1,29 @@
-from flask import Blueprint, jsonify, request  # Import 'request' from 'flask'
+from flask import Blueprint, jsonify, request
 from flask_restful import Api, Resource
-import requests
-import random
-import csv
 from model.encode import *
-import json
+
 
 encode_api = Blueprint('encode_api', __name__, url_prefix='/api/encode')
 api = Api(encode_api)
 
 class EncodeAPI():
     class _Read(Resource):
-        def get(self):
-            with open('./data/userresponses.csv', mode='r') as csv_file:
-                csv_reader = csv.DictReader(csv_file)
-                responses = [{'response': row['response']} for row in csv_reader]
-            return jsonify(responses)
+            def get(self):
+                try:
+                    responses = getResponses()
+                    response_list = [r['response'] for r in responses]
+                    return jsonify(response_list)
+                except Exception as e:
+                    return {'response': 'error', 'message': str(e)}
+
 
     class _Write(Resource):
         def post(self):
             try:
                 data = request.get_json()
                 response = data.get('userInput')
-                with open('./data/userresponses.csv', mode='a', newline='') as csv_file:
-                    fieldnames = ['response']
-                    writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-                    writer.writerow({'response': response})
-                return {'response': 'success'}
+                addResponse(response)  # Call addResponse in model/encode.py to add the response to the respond_list
+                return {'sent to model': 'success', 'output': response, 'responses': respond_data}
             except Exception as e:
                 print('Error adding response:', e)
                 return {'response': 'error', 'message': str(e)}
@@ -34,24 +31,17 @@ class EncodeAPI():
 api.add_resource(EncodeAPI._Read, '/')
 api.add_resource(EncodeAPI._Write, '/write')
 
-
 if __name__ == "__main__": 
     import requests
     from flask import request
 
     server = request.host_url.rstrip('/') # get the URL of the server dynamically
     url = server + "/api/encode"
-    responses = []  # responses list
     print(url)
 
-    responses.append(
-        requests.get(url+"/")  # read responses by id
-        )
+    response = requests.get(url+"/")  # read responses by id
+    print(response)
+    try:
+        print(response.json())
+    except:        print("unknown error")
 
-    # cycle through responses
-    for response in responses:
-        print(response)
-        try:
-            print(response.json())
-        except:
-            print("unknown error")

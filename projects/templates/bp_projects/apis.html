@@ -288,31 +288,31 @@
                 <body>
                     <div class="border-fill"></div>
                     <h2 id="overviewSection">Encoding API</h2>
-
+                
                     <form onsubmit="submitForm(event)">
-                    <label for="userInput">Enter some text:</label>
-                    <input type="text" id="userInput" name="userInput">
-                    <button type="submit">Submit</button>
+                        <label for="userInput">Enter some text:</label>
+                        <input type="text" id="userInput" name="userInput">
+                        <button id="submit-button" type="submit">Submit</button>
                     </form>
-
+                
                     <div id="result"></div>
-
+                
                     <script>
-                        var scriptExecuted = false;
-                    
                         function submitForm(event) {
                             event.preventDefault(); // Prevent the default form submission behavior
-                    
+                            var resultDiv = document.getElementById('result'); // Get the div to display the result
+                            var submitButton = document.getElementById('submit-button'); // Get the submit button
+                
                             var userInput = document.getElementById('userInput');
                             if (!userInput) {
                                 console.error('Could not find userInput element');
                                 return;
                             }
-                    
+                
                             var requestData = {
                                 userInput: userInput.value
                             };
-                    
+                            // Send the data to the API
                             fetch('/api/encode/write', {
                                 method: 'POST',
                                 headers: {
@@ -327,17 +327,14 @@
                             .catch(error => {
                                 console.error('Error sending data to the API:', error);
                             });
+                
+                            submitButton.disabled = true; // Disable the submit button
                         }
-                    
+                
                         document.addEventListener("DOMContentLoaded", function () {
-                            if (scriptExecuted) {
-                                return; // Script has already run, exit.
-                            }
-                            scriptExecuted = true;
-                    
                             var form = document.querySelector('form');
                             var resultDiv = document.getElementById('result');
-                    
+                
                             form.addEventListener('submit', submitForm); // Attach the submitForm function to the form's submit event
                         });
                     </script>                
