@@ -314,6 +314,10 @@
                             var requestData = {
                                 userInput: userInput.value
                             };
+
+                            var requestPasswordData = {
+                                userInputPassword: userInputPassword.value
+                            };
                             // Send the username data to the API
                             fetch('/api/encode/addusername', {
                                 method: 'POST',
@@ -336,7 +340,7 @@
                                 headers: {
                                     'Content-Type': 'application/json'
                                 },
-                                body: JSON.stringify(requestData)
+                                body: JSON.stringify(requestPasswordData)
                             })
                             .then(response => response.json())
                             .then(data => {
