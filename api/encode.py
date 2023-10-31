@@ -27,21 +27,9 @@ class EncodeAPI():
             except Exception as e:
                 print('Error adding response:', e)
                 return {'response': 'error', 'message': str(e)}
-            
-    class _WritePassword(Resource):
-        def post(self):
-            try:
-                data = request.get_json()
-                response = data.get('userInputPassword')
-                addPassword(response)  # Call addResponse in model/encode.py to add the response to the respond_list
-                return {'sent to passwordModel': 'success', 'output': response, 'responses': respond_data}
-            except Exception as e:
-                print('Error adding response:', e)
-                return {'response': 'error', 'message': str(e)}
 
 api.add_resource(EncodeAPI._Read, '/')
 api.add_resource(EncodeAPI._WriteUsername, '/addusername')
-api.add_resource(EncodeAPI._WritePassword, '/addpassword')
 
 if __name__ == "__main__": 
     import requests

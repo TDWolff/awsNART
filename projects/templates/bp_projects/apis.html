@@ -292,8 +292,6 @@
                     <form onsubmit="submitForm(event)">
                         <label for="userInput">Enter Username Here:</label>
                         <input type="text" id="userInput" name="userInput">
-                        <label for="userInputPassword">Enter Password Here:</label>
-                        <input type="text" id="userInputPassword" name="userInputPassword">
                         <button id="submit-button" type="submit">Submit</button>
                     </form>
                 
@@ -314,10 +312,7 @@
                             var requestData = {
                                 userInput: userInput.value
                             };
-
-                            var requestPasswordData = {
-                                userInputPassword: userInputPassword.value
-                            };
+                            
                             // Send the username data to the API
                             fetch('/api/encode/addusername', {
                                 method: 'POST',
@@ -333,24 +328,6 @@
                             .catch(error => {
                                 console.error('Error sending data to the API:', error);
                             });
-
-                            // Send the password data to the API
-                            fetch('/api/encode/addpassword', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify(requestPasswordData)
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                console.log(data);
-                            })
-                            .catch(error => {
-                                console.error('Error sending data to the API:', error);
-                            });
-                
-                            submitButton.disabled = true; // Disable the submit button
                         }
                 
                         document.addEventListener("DOMContentLoaded", function () {

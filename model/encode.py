@@ -30,13 +30,5 @@ def addUsername(response):
         return jsonify({'updating list': 'success', 'output': response, 'responses': respond_data})
     else:
         return jsonify({'updating list': 'failed', 'message': 'Response already exists in the list'})
-    
-def addPassword(response):
-    global respond_data
-    if response not in [r['response'] for r in respond_data]:  # Check if the response already exists in the list
-        respond_data.append({"response": response})  # Add the new response to the list
-        saveResponses()  # Save the updated responses to the file
-        return jsonify({'updating list': 'success', 'output': response, 'responses': respond_data})
-    else:
-        return jsonify({'updating list': 'failed', 'message': 'Response already exists in the list'})
+
     
