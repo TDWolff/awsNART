@@ -9,7 +9,7 @@
 {% set authors = "https://thesmack.nighthawkcodingsociety.com/digitalPortfolios/"  %}
 
 <!-- Setting up a block replacement to customize background to RINGS -->
-{% block background %}
+<!-- {% block background %}
     <script src="{{ url_for('static', filename='js/three.r119.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/vanta.halo.min.js') }}"></script>
     <script>
@@ -22,4 +22,48 @@
             minWidth: 200.00
         })
     </script>
+{% endblock %} -->
+
+{% block body %}
+<html>
+<head>
+    <title>Register</title>
+</head>
+<body>
+    <h1>Register</h1>
+    <p>Register for an account</p>
+    <form id = login>
+        <input type="text" id="username" name="username" required><br>
+        <input type="password" id="password" name="password" required><br>
+        <button type="button" onclick="sendData()">Submit Data</button>
+        <br>
+        <input type="text" id="username2" name="username2" required><br>
+        <br>
+        <button type="button" onclick="deleteData()">Remove my account</button>
+        </form>
+        <script>
+        function sendData() { 
+            const Data = {
+                "username": document.getElementById("username").value,
+                "password": document.getElementById("password").value
+            }
+            fetch("http://127.0.0.1:8120/api/login/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(Data)
+            })
+        }
+        function deleteData() {
+        let deleteduser = document.getElementById("username2").value
+        fetch(`http://127.0.0.1:8120/api/login/delete/${deleteduser}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+                }
+            })
+        }
+        </script>
+</html>
 {% endblock %}

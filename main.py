@@ -8,18 +8,20 @@ from model.jokes import initJokes
 from model.users import initUsers
 from model.players import initPlayers
 from model.encode import initEncode
+from flask_cors import CORS
 
 
 # Setup APIs
 from api.covid import covid_api  # Blueprint import API definition
 from api.joke import joke_api  # Blueprint import API definition
-from api.user import user_api  # Blueprint import API definition
 from api.player import player_api
 from api.encode import encode_api
+from api.database import login_api
 
+# Initialize the SQLAlchemy object to work with the Flask app instance
+db.init_app(app)
 
-# Add Any Other API imports here
-
+app.register_blueprint(login_api)
 
 
 # Setup App pages
@@ -31,7 +33,6 @@ db.init_app(app)
 # Register URIs
 app.register_blueprint(joke_api)  # Register API routes
 app.register_blueprint(covid_api)  # Register API routes
-app.register_blueprint(user_api)  # Register API routes
 app.register_blueprint(player_api)
 app.register_blueprint(app_projects)  # Register app pages
 app.register_blueprint(encode_api)  # Register encode API routes
@@ -53,7 +54,6 @@ def table():
 @app.before_first_request
 def activate_job():  # Activate these items
     initJokes()
-    initUsers()
     initPlayers()
     initEncode()
 
@@ -61,5 +61,5 @@ def activate_job():  # Activate these items
 if __name__ == "__main__":
     # Change name for testing
     from flask_cors import CORS
-    cors = CORS(app)
+    cors = CORS(app, resources={r"/api/*": {"origins": "http://localhost:8120"}})
     app.run(debug=True, host="0.0.0.0", port="8120")
