@@ -10,7 +10,6 @@ from model.players import initPlayers
 from model.encode import initEncode
 from flask_cors import CORS
 
-
 # Setup APIs
 from api.covid import covid_api  # Blueprint import API definition
 from api.joke import joke_api  # Blueprint import API definition
@@ -21,8 +20,7 @@ from api.database import login_api
 # Initialize the SQLAlchemy object to work with the Flask app instance
 db.init_app(app)
 
-app.register_blueprint(login_api)
-
+app.register_blueprint(login_api, url_prefix='/auth')
 
 # Setup App pages
 from projects.projects import app_projects  # Blueprint directory import projects definition
@@ -61,5 +59,5 @@ def activate_job():  # Activate these items
 if __name__ == "__main__":
     # Change name for testing
     from flask_cors import CORS
-    cors = CORS(app, resources={r"/api/*": {"origins": "http://localhost:8120"}})
+    cors = CORS(app)
     app.run(debug=True, host="0.0.0.0", port="8120")

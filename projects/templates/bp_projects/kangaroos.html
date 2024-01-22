@@ -25,45 +25,86 @@
 {% endblock %} -->
 
 {% block body %}
-<html>
+<html lang="en">
 <head>
-    <title>Register</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
 </head>
 <body>
-    <h1>Register</h1>
-    <p>Register for an account</p>
-    <form id = login>
-        <input type="text" id="username" name="username" required><br>
-        <input type="password" id="password" name="password" required><br>
-        <button type="button" onclick="sendData()">Submit Data</button>
+    <h2>Login</h2>
+    <form id="loginForm">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
         <br>
-        <input type="text" id="username2" name="username2" required><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
         <br>
-        <button type="button" onclick="deleteData()">Remove my account</button>
-        </form>
-        <script>
-        function sendData() { 
-            const Data = {
-                "username": document.getElementById("username").value,
-                "password": document.getElementById("password").value
-            }
-            fetch("http://127.0.0.1:8120/api/login/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(Data)
-            })
-        }
-        function deleteData() {
-        let deleteduser = document.getElementById("username2").value
-        fetch(`http://127.0.0.1:8120/api/login/delete/${deleteduser}`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
+        <button type="button" onclick="login()">Login</button>
+    </form>
+
+    <h2>Register</h2>
+    <form id="registerForm">
+        <label for="newUsername">Username:</label>
+        <input type="text" id="newUsername" name="newUsername" required>
+        <br>
+        <label for="newPassword">Password:</label>
+        <input type="password" id="newPassword" name="newPassword" required>
+        <br>
+        <button type="button" onclick="register()">Register</button>
+    </form>
+
+    <script>
+        async function login() {
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            try {
+                const response = await fetch("/auth/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ username, password }),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert(result.message);
+                } else {
+                    alert(result.error);
                 }
-            })
+            } catch (error) {
+                console.error("Error during login:", error);
+            }
         }
-        </script>
+
+        async function register() {
+            var newUsername = document.getElementById("newUsername").value;
+            var newPassword = document.getElementById("newPassword").value;
+
+            try {
+                const response = await fetch("/auth/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ username: newUsername, password: newPassword }),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert(result.message);
+                } else {
+                    alert(result.error);
+                }
+            } catch (error) {
+                console.error("Error during registration:", error);
+            }
+        }
+    </script>
+</body>
 </html>
 {% endblock %}
